@@ -16,14 +16,35 @@
 /*                              PUBLIC FUNCTIONS                              */
 /*----------------------------------------------------------------------------*/
 
+static position_t current_attacker_position;
+static int dir_attacker = 0;
+static int add = 1;
+
 direction_t execute_attacker_strategy(
     position_t attacker_position, Spy defender_spy) {
-  // TODO: unused parameters, remove these lines later
-  UNUSED(attacker_position);
-  UNUSED(defender_spy);
 
-  // TODO: Implement Attacker logic here
-  return (direction_t) DIR_RIGHT;
+	if(current_attacker_position.i == attacker_position.i && 
+		current_attacker_position.j == attacker_position.j)
+		dir_attacker = (dir_attacker + add) % 4;
+
+	if(attacker_position.j == 4 && add == 1){
+		position_t defender_position = get_spy_position(defender_spy);
+		if(defender_position.i <= 4) {
+			dir_attacker = 3;
+			add = 3;
+		}
+	}
+
+  	current_attacker_position = attacker_position;
+
+	if(dir_attacker == 0) 
+		return (direction_t) DIR_UP;
+	else if(dir_attacker == 1) 
+		return (direction_t) DIR_RIGHT;
+	else if(dir_attacker == 2) 
+		return (direction_t) DIR_DOWN;
+	else 
+		return (direction_t) DIR_LEFT;
 }
 
 /*----------------------------------------------------------------------------*/
